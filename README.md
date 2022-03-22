@@ -25,13 +25,13 @@
 
 ### POST /functionup/interns
 - Create a document for an intern. 
-- Also save the collegeId along with the document. Your request body contains the following fields - { name, mobile, email, collegeName}
+- Also save the collegeId along with the document. Your request body contains the following fields - { name, mobile, email, collegeId}
 - Return HTTP status 201 on a succesful document creation. Also return the document. The response should be a JSON object like [this](#successful-response-structure) 
 
 - Return HTTP status 400 for an invalid request with a response body like [this](#error-response-structure)
 
 ### GET /functionup/collegeDetails
-- Returns the college details for the requested college (Expect a query parameter by the name `collegeName`. This is anabbreviated college name. For example `iith`)
+- Returns the college details for the requested college (Expect a query parameter by the name `collegeName`. This is an abbreviated college name. For example `iith`)
 - Returns the list of all interns who have applied for internship at this college.
 - The response structure should look like [this](#college-details)
 
@@ -96,7 +96,7 @@ Refer below sample
     "name": "xyz",
     "fullName": "Some Institute of Engineering and Technology",
     "logoLink": "some public s3 link for a college logo",
-    "interests": [
+    "interns": [
       {
         "_id": "123a47301a53ecaeea02be59",
         "name": "Jane Doe",
@@ -125,3 +125,5 @@ Refer below sample
   }
 }
 ```
+
+

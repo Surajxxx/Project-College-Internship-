@@ -12,11 +12,8 @@ const isValidRequestBody = function(reqBody){
    return Object.keys(reqBody).length > 0
 }
 
-const isValidObjectId = function(objectId){
-    return mongoose.Schema.Types.isValid(objectId)
-}
 
-const createCollege = async function(req, res){
+const registerCollege = async function(req, res){
     try {
         const requestBody = req.body
 
@@ -26,6 +23,7 @@ const createCollege = async function(req, res){
         return res.status(400).send({status : false, message: "Please provide college data"})
     }
 
+    // using destructuring 
     const {name , fullName, logoLink } = requestBody
 
     if(!isValid(name)){
@@ -40,9 +38,9 @@ const createCollege = async function(req, res){
         return res.status(400).send({status : false, message: "logoLink is required"})
     }
     
-    const isNameNotUnique = await CollegeModel.findOne({name : name}) 
+    const isNameUnique = await CollegeModel.findOne({name : name}) 
 
-    if(isNameNotUnique) {
+    if(isNameUnique) {
         return res.status(400).send({status : false, message : "name already exist"})
     }
 
@@ -58,7 +56,7 @@ const createCollege = async function(req, res){
     }
 }
 
-const getCollegeDetails = async function(req, res){
+const getCollegeDetailsWithInterns = async function(req, res){
     try{    
         const queryParams = req.query
         const collegeName = queryParams.collegeName
@@ -71,32 +69,34 @@ const getCollegeDetails = async function(req, res){
             return res.status(400).send({status : false, message: "please provide collegeName"})
         }
 
-        const collegeByCollegeName = await CollegeModel.findOne({name : collegeName})
+        const college = await CollegeModel.findOne({name : collegeName})
+        console.log(college)
 
-        if(!collegeByCollegeName) {
+        if(!college) {
             return res.status(404).send({status: false, message: "invalid collegeName"})
         }
 
-        const collegeID = collegeByCollegeName._id
+        const collegeID = college._id
 
         const getInternsByCollegeID = await InternModel.find({collegeId : collegeID }).select({_id: 1, email: 1, name: 1, mobile: 1})
+        console.log(getInternsByCollegeID)
+        
        
+      const {name, fullName, logoLink} = college
 
-      const {name, fullName, logoLink} = collegeByCollegeName
-
-      const data = {
+      const collegeDetailsIncludingInterns = {
                     name: name,
                     fullName : fullName,
                     logoLink : logoLink,
                     interns : getInternsByCollegeID
                  }
 
-        res.status(200).send({status: true, data: data})
+        res.status(200).send({status: true, data: collegeDetailsIncludingInterns})
 
     } catch (error){
         res.status(500).send({error : error.message})
     }
 }
 
-module.exports.createCollege = createCollege
-module.exports.getCollegeDetails = getCollegeDetails
+module.exports.registerCollege = registerCollege
+module.exports.getCollegeDetailsWithInterns = getCollegeDetailsWithInterns

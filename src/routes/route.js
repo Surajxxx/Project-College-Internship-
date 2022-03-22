@@ -9,13 +9,13 @@ router.get('/test', function(req, res){
 })
 
 // new college entry
-router.post('/functionup/colleges', CollegeController.createCollege)
+router.post('/functionup/colleges', CollegeController.registerCollege)
 
-// get college details
-router.get('/functionup/collegeDetails', CollegeController.getCollegeDetails)
+// get college details with interns
+router.get('/functionup/collegeDetails', CollegeController.getCollegeDetailsWithInterns)
 
 // new intern entry
-router.post('/functionup/interns', InternController.createIntern )
+router.post('/functionup/interns', InternController.registerIntern )
 
 
 module.exports = router;

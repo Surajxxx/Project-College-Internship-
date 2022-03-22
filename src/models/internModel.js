@@ -8,7 +8,7 @@ const emailValidation = function(email){
 }
 
 const mobileValidation = function(mobile){
-    let regexForMobile = /^[6-9]\d{9}$/
+    let regexForMobile = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/
     return regexForMobile.test(mobile)
 }
 
@@ -24,9 +24,10 @@ const internSchema = new mongoose.Schema({
         required :[true, "email is mandatory"],
         unique: [true, "email already exist"],
         validate: [emailValidation, "please enter a valid email"],
-        trim : true },
+        trim : true,
+        lowercase : true },
     mobile: {
-        type : Number,
+        type : String,
         required : [true, "mobile number is mandatory"],
         unique: [true, "mobile number already exist"],
         validate:[mobileValidation, "please enter a valid mobile number"],
