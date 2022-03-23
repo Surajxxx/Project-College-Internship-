@@ -68,7 +68,7 @@ const registerIntern = async function (req, res){
     const college = await CollegeModel.findById(collegeId)
     
     if(!college){
-        return  res.status(400).send({status: false, message: `no college found by this ${collegeId} ID`})
+        return  res.status(404).send({status: false, message: `no college found by this ${collegeId} ID`})
     }
     
     // validation ends here
