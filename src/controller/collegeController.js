@@ -70,7 +70,6 @@ const getCollegeDetailsWithInterns = async function(req, res){
         }
 
         const college = await CollegeModel.findOne({name : collegeName})
-        console.log(college)
 
         if(!college) {
             return res.status(404).send({status: false, message: "invalid collegeName"})
