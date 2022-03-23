@@ -8,7 +8,7 @@ const emailValidation = function(email){
 }
 
 const mobileValidation = function(mobile){
-    let regexForMobile = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/
+    let regexForMobile = /^[6-9]\d{9}$/
     return regexForMobile.test(mobile)
 }
 

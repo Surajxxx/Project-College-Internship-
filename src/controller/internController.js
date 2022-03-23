@@ -42,8 +42,8 @@ const registerIntern = async function (req, res){
         return res.status(400).send({status: false, message: "mobile number is required"})
     }
 
-    if(! /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/.test(mobile)){
-        return res.status(400).send({status: false, message: `enter a valid mobile number. like:[ "7578541254", "+917578541254", "07578541254", "917578541254"]`})
+    if(! /^[6-9]\d{9}$/.test(mobile)){
+        return res.status(400).send({status: false, message: `enter only 10 digit valid mobile number starts with 6/7/8/9. `})
     }   
 
 
@@ -77,7 +77,7 @@ const registerIntern = async function (req, res){
     const newRequestBody = requestBody
 
     newRequestBody.collegeId = collegeId
-    
+
     delete newRequestBody.collegeName
 
     const newIntern = await InternModel.create(newRequestBody)
