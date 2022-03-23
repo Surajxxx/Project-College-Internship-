@@ -18,8 +18,13 @@ let regexForLinks = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z
 const registerCollege = async function(req, res){
     try {
         const requestBody = req.body
+        const queryParams = req.query
 
     // validation
+
+    if(isValidRequestBody(queryParams)){
+        return res.status(400).send({status: false, message: "please provide valid endpoint"})
+    }
 
     if(!isValidRequestBody(requestBody)){
         return res.status(400).send({status : false, message: "Please provide college data"})
@@ -71,6 +76,11 @@ const getCollegeDetailsWithInterns = async function(req, res){
     try{    
         const queryParams = req.query
         const collegeName = queryParams.collegeName
+        const requestBody = req.body
+
+        if(isValidRequestBody(requestBody)){
+            return res.status(400).send({status : false, message: "No data required in request body"})
+        }
 
         if(!isValidRequestBody(queryParams)){
             return res.status(400).send({status : false, message: "please provide inputs for getting college details"})
@@ -80,7 +90,7 @@ const getCollegeDetailsWithInterns = async function(req, res){
             return res.status(400).send({status : false, message: "please provide collegeName"})
         }
 
-        const college = await CollegeModel.findOne({name : collegeName})
+        const college = await CollegeModel.findOne({name : collegeName, isDeleted: false})
         
 
         if(!college) {

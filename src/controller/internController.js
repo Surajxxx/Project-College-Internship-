@@ -17,8 +17,12 @@ const registerIntern = async function (req, res){
 
     try{
         const requestBody = req.body
+        const queryParams = req.query
 
     // validation
+    if(isValidRequestBody(queryParams)){
+        return res.status(400).send({status: false, message: "please provide valid endpoint"})
+    }
 
     if(!isValidRequestBody(requestBody)){
         return res.status(400).send({status: false, message: "please provide input data"})
@@ -65,7 +69,7 @@ const registerIntern = async function (req, res){
     
     // validation ends here
 
-    const college = await CollegeModel.findOne({name : collegeName})
+    const college = await CollegeModel.findOne({name : collegeName, isDeleted : false})
         
     if(!college){
         return  res.status(404).send({status: false, message: `no college found by ${collegeName} name`})
