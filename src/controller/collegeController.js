@@ -79,14 +79,10 @@ const getCollegeDetailsWithInterns = async function(req, res){
         const collegeID = college._id
 
         const getInternsByCollegeID = await InternModel.find({collegeId : collegeID }).select({_id: 1, email: 1, name: 1, mobile: 1})
-        console.log(getInternsByCollegeID)
         
         const collegeDetailsIncludingInterns = await CollegeModel.findById(collegeID).lean().select({name:1, fullName:1, logoLink: 1, _id: 0})
-       console.log(collegeDetailsIncludingInterns)
-        
-       collegeDetailsIncludingInterns.interns = getInternsByCollegeID
-
-      
+       
+        collegeDetailsIncludingInterns.interns = getInternsByCollegeID    
 
         res.status(200).send({status: true, data: collegeDetailsIncludingInterns})
 
