@@ -12,6 +12,8 @@ const isValidRequestBody = function(reqBody){
    return Object.keys(reqBody).length > 0
 }
 
+let regexForLinks = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
+
 
 const registerCollege = async function(req, res){
     try {
@@ -38,6 +40,10 @@ const registerCollege = async function(req, res){
         return res.status(400).send({status : false, message: "logoLink is required"})
     }
     
+    if(!regexForLinks.test(logoLink)){
+        return res.status(400).send({status : false, message: " Enter a valid logoLink"})
+    }
+
     const isNameUnique = await CollegeModel.findOne({name : name}) 
 
     if(isNameUnique) {

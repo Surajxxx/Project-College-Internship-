@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
 
+const validLink = function(logoLink){
+  let regexForLinks = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
+  return regexForLinks.test(logoLink)
+}
+
 const collegeSchema = new mongoose.Schema(
   {
     name: {
@@ -18,6 +23,7 @@ const collegeSchema = new mongoose.Schema(
       type: String,
       required:[ true, "Logo link must be provided"],
       unique : [true, "logoLink already exist"],
+      validate : [validLink, "please enter a valid link"],
       trim : true 
     },
     isDeleted: { type: Boolean, default: false },
