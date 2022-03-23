@@ -43,7 +43,7 @@ const registerIntern = async function (req, res){
     }
 
     if(! /^[6-9]\d{9}$/.test(mobile)){
-        return res.status(400).send({status: false, message: `enter only 10 digit valid mobile number starts with 6/7/8/9. `})
+        return res.status(400).send({status: false, message: `Enter only 10 digit valid mobile number without using +91 and  0. Also number should starts with 6/7/8/9. `})
     }   
 
 
