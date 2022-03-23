@@ -12,9 +12,6 @@ const isValidRequestBody = function(reqBody){
     return Object.keys(reqBody).length > 0
 }
 
-const isValidObjectId = function(objectId){
-    return mongoose.Types.ObjectId.isValid(objectId)
-}
 
 const registerIntern = async function (req, res){
 
@@ -27,7 +24,7 @@ const registerIntern = async function (req, res){
         return res.status(400).send({status: false, message: "please provide input data"})
     }
 
-    const {name, email, mobile, collegeId} = requestBody
+    const {name, email, mobile, collegeName} = requestBody
 
     if(!isValid(name)){
         return res.status(400).send({status: false, message: "Name is required"})
@@ -49,9 +46,6 @@ const registerIntern = async function (req, res){
         return res.status(400).send({status: false, message: `enter a valid mobile number. like:[ "7578541254", "+917578541254", "07578541254", "917578541254"]`})
     }   
 
-    if(!isValidObjectId(collegeId)){
-        return res.status(400).send({status: false, message: "enter a valid college ID"})
-    }
 
     const isEmailUnique = await InternModel.findOne({email : email})
 
@@ -64,16 +58,29 @@ const registerIntern = async function (req, res){
     if(isMobileUnique){
         return res.status(400).send({status: false, message: "mobile number already exist"})
     }
-
-    const college = await CollegeModel.findById(collegeId)
     
-    if(!college){
-        return  res.status(404).send({status: false, message: `no college found by this ${collegeId} ID`})
+    if(!isValid(collegeName)){
+        return res.status(400).send({status: false, message: "collegeName is required"})
     }
     
     // validation ends here
+
+    const college = await CollegeModel.findOne({name : collegeName})
+        
+    if(!college){
+        return  res.status(404).send({status: false, message: `no college found by ${collegeName} name`})
+    }
     
-    const newIntern = await InternModel.create(requestBody)
+    
+    const collegeId = college._id
+
+    const newRequestBody = requestBody
+
+    newRequestBody.collegeId = collegeId
+    
+    delete newRequestBody.collegeName
+
+    const newIntern = await InternModel.create(newRequestBody)
 
     res.status(201).send({status: true, message: "new intern entry done", data: newIntern})
 

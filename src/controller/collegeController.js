@@ -44,12 +44,17 @@ const registerCollege = async function(req, res){
         return res.status(400).send({status : false, message : "name already exist"})
     }
 
+    const isLogoLinkUnique = await CollegeModel.findOne({logoLink : logoLink})
+
+    if(isLogoLinkUnique){
+        return res.status(400).send({status : false, message : "logoLink already exist"})
+    }
+
     // validation ends here
 
     const newCollegeEntry =  await CollegeModel.create(requestBody)
 
     res.status(201).send({status: true, message: "new college entry done", data : newCollegeEntry })
-
 
     } catch (error){
         res.status(500).send({error : error.message})
@@ -70,7 +75,7 @@ const getCollegeDetailsWithInterns = async function(req, res){
         }
 
         const college = await CollegeModel.findOne({name : collegeName})
-        console.log(college)
+        
 
         if(!college) {
             return res.status(404).send({status: false, message: "invalid collegeName"})
@@ -83,7 +88,6 @@ const getCollegeDetailsWithInterns = async function(req, res){
         const collegeDetailsIncludingInterns = await CollegeModel.findById(collegeID).lean().select({name:1, fullName:1, logoLink: 1, _id: 0})
                
         collegeDetailsIncludingInterns.interns = getInternsByCollegeID
-
 
         res.status(200).send({status: true, data: collegeDetailsIncludingInterns})
 
