@@ -14,7 +14,12 @@ const collegeSchema = new mongoose.Schema(
       required: [true, "Full name must be provided"],
       trim: true,
     },
-    logoLink: { type: String, required:[ true, "Logo link must be provided"], unique : [true, "logoLink already exist"] },
+    logoLink: { 
+      type: String,
+      required:[ true, "Logo link must be provided"],
+      unique : [true, "logoLink already exist"],
+      trim : true 
+    },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
