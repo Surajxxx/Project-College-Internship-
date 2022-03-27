@@ -101,11 +101,19 @@ const getCollegeDetailsWithInterns = async function(req, res){
 
         const getInternsByCollegeID = await InternModel.find({collegeId : collegeID }).select({_id: 1, email: 1, name: 1, mobile: 1})
                
-        const collegeDetailsIncludingInterns = await CollegeModel.findById(collegeID).lean().select({name:1, fullName:1, logoLink: 1, _id: 0})
+        const collegeDetails = await CollegeModel.findById(collegeID).lean().select({name:1, fullName:1, logoLink: 1, _id: 0})
                
-        collegeDetailsIncludingInterns.interns = getInternsByCollegeID
+        if(getInternsByCollegeID.length === 0){
+            res.status(200).send({status : true, data: collegeDetails})
 
-        res.status(200).send({status: true, data: collegeDetailsIncludingInterns})
+        }else{
+            
+            collegeDetails.interns = getInternsByCollegeID
+
+            res.status(200).send({status: true, data: collegeDetails})
+
+        }
+        
 
     } catch (error){
         res.status(500).send({error : error.message})
